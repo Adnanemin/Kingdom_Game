@@ -30,6 +30,7 @@ public class Army {
     // Core methods
     // -------------------------
 
+    // Basic: Add one unit
     public void addUnit(Unit unit) {
         //Simple validation
         if(unit == null){
@@ -37,6 +38,24 @@ public class Army {
         }
         units.add(unit);
     }
+
+    // Overload: Add multiple units
+    public void addUnit(Unit unit, int count){
+        for (int i = 0; i < count; i ++){
+            addUnit(unit);
+        }
+    }
+
+    // Overload: Add units from a list
+    public void addUnit(List<Unit> unitList){
+        for(Unit u : unitList){
+            addUnit(u);
+        }
+    }
+
+    // -------------------------
+    // Power & Upkeep
+    // -------------------------
 
     public int getTotalPower() {
         int total = 0;
