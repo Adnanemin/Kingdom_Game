@@ -2,13 +2,14 @@ package game.buildings;
 
 import game.Kingdom;
 
-public class LargeHouse extends Building {
+public class LargeHouse extends House {
     //--------------------------
     // Constructor
     //--------------------------
     public LargeHouse(){
-        super("Large House", 40);
+        super("Large House", 40, 15);
         // cost = 40 golds
+        // capacity = 15
     }
 
     //--------------------------
@@ -17,7 +18,6 @@ public class LargeHouse extends Building {
     @Override
     public void applyDailyEffect(Kingdom kingdom){
         // Large houses focused on faster population growth but slower happiness
-        kingdom.changePopulation(+3);
-        kingdom.changeFood(-2);
+        kingdom.changeFood(+1);
     }
 }

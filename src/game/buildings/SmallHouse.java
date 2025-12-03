@@ -1,13 +1,14 @@
 package game.buildings;
 
 import game.Kingdom;
-public class SmallHouse extends Building {
+public class SmallHouse extends House {
     //--------------------------
     // Constructor
     //--------------------------
     public SmallHouse(){
-        super("Small House", 20);
+        super("Small House", 20, 5);
         // cost = 20 golds
+        // capacity = 5
     }
     //--------------------------
     // Daily Effect
@@ -16,7 +17,6 @@ public class SmallHouse extends Building {
     public void applyDailyEffect(Kingdom kingdom){
         // Small houses focused on happiness and modest grown
         kingdom.changeHappiness(+2);
-        kingdom.changePopulation(+1);
         kingdom.changeFood(-1);
     }
 }

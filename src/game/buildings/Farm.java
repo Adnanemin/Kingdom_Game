@@ -16,7 +16,8 @@ public class Farm extends Building {
     //--------------------------
     @Override
     public void applyDailyEffect(Kingdom kingdom){
-        // Farms produce food every day
-        kingdom.changeFood(+5);
+        // Farms produce food every day and pay taxes
+        kingdom.changeFood(+20);
+        kingdom.changeGold(+2);
     }
 }

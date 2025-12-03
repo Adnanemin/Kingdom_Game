@@ -2,11 +2,11 @@ package game.buildings;
 
 import game.Kingdom;
 
-public class Barracks extends Building {
+public class Barrack extends Building {
     //--------------------------
     // Constructor
     //--------------------------
-    public Barracks(){
+    public Barrack(){
         super("Barracks", 40);
         // cost = 40 gold
     }
