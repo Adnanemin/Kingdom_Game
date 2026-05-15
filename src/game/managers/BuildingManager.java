@@ -4,7 +4,6 @@ import game.Kingdom;
 import game.buildings.*;
 import game.exceptions.InsufficientResourceException;
 import game.exceptions.InvalidBuildingException;
-import game.setup.InputManager;
 
 import java.util.Scanner;
 

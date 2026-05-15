@@ -1,4 +1,4 @@
-package game.setup;
+package game.managers;
 
 import java.util.Scanner;
 

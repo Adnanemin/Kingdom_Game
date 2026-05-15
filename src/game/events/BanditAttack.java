@@ -26,8 +26,8 @@ public class BanditAttack implements RandomEvent{
             changeGold = changeGold / 2;
             changeFood = changeFood / 2;
         }
-        kingdom.changeGold(-changeGold);
-        kingdom.changeFood(-changeFood);
+        kingdom.changeGold(changeGold);
+        kingdom.changeFood(changeFood);
         kingdom.changeHappiness(changeHappiness);
         System.out.println("Gold " + changeGold + " Happiness " + changeHappiness + " Food " + changeFood);
     }

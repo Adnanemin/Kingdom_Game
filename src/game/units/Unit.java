@@ -1,19 +1,19 @@
-#ffffffpackage game.units;
+package game.units;
 
 public abstract class Unit {
     private final String name;
     private int attack;
-    private int defence;
-    private int foodUpkeep;
-    private int cost;
+    private int defense;
+    private final int foodUpkeep;
+    private final int cost;
 
     //---------------
     // Constructor
     //---------------
-    public Unit(String name, int attack, int defence, int foodUpkeep, int cost){
+    public Unit(String name, int attack, int defense, int foodUpkeep, int cost){
         this.name = name;
         this.attack = attack;
-        this.defence = defence;
+        this.defense = defense;
         this.foodUpkeep = foodUpkeep;
         this.cost = cost;
     }
@@ -23,7 +23,7 @@ public abstract class Unit {
     //---------------
     public String getName() {return name; }
     public int getAttack() {return attack; }
-    public int getDefence() {return defence; }
+    public int getDefense() {return defense; }
     public int getFoodUpKeep() {return foodUpkeep; }
     public int getCost() {return cost; }
 

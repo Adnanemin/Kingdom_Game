@@ -7,6 +7,7 @@ import game.managers.*;
 import game.ui.*;
 import game.events.*;
 import game.rules.*;
+import game.util.Outcome;
 
 import java.util.Scanner;
 
@@ -152,8 +153,10 @@ public class GameEngine {
     // -----------------------------------
     private void finalBattle() {
         FinalBattle fb = new FinalBattle(playerKingdom, enemyKingdom);
-        boolean playerWon = fb.startBattle();
 
+        Outcome<Integer> outcome = fb.startBattle();
+        boolean playerWon = outcome.isSuccess();
+        int powerDiff = outcome.getDetails();
         System.out.println("\n===== BATTLE RESULT =====");
         if (playerWon) {
             System.out.println("VICTORY! You defeated the Dark Empire!");

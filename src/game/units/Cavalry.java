@@ -7,8 +7,9 @@ public class Cavalry extends Unit{
     public Cavalry(){
         super("Cavalry", 7, 4, 4, 20);
         // attack = 7 -faster and stronger
-        // defence = 4
+        // defense = 4
         // foodUpkeep = 4 -the horse included
+        // cost = 20
     }
 
     //---------------------------
@@ -16,6 +17,6 @@ public class Cavalry extends Unit{
     //---------------------------
     @Override
     public int getBattleValue(){
-        return (attack * 3) + defence; // Elite level units
+        return (getAttack() * 3) + getDefense(); // Elite level units
     }
 }

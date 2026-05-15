@@ -6,8 +6,8 @@ public abstract class Building {
     //-----------
     // Fields
     //-----------
-    protected String name;
-    protected int cost; // gold cost to build
+    private final String name;
+    private final int cost; // gold cost to build
 
     //--------------------------
     // Constructor

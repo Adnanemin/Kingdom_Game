@@ -3,8 +3,6 @@ package game.buildings;
 import game.Kingdom;
 
 public class Wall extends Building{
-    // Permanent defence bonus for the kingdom
-    private final int defenceBonus = 20;
 
     //--------------------------
     // Constructor
@@ -29,6 +27,8 @@ public class Wall extends Building{
     // Getter for defensive bonus
     //--------------------------
     public int getDefenceBonus(){
-        return defenceBonus;
+        // Permanent defense bonus for the kingdom
+        int defenseBonus = 20;
+        return defenseBonus;
     }
 }

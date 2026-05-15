@@ -42,7 +42,7 @@ public class Kingdom {
 
     private int housingCapacity;
     private final List<Building> buildings;
-    private final Army army;
+    private final Army army; 
 
     private final Random random = new Random();
 

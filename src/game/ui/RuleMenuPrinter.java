@@ -2,7 +2,7 @@ package game.ui;
 
 import game.exceptions.InvalidRuleException;
 import game.rules.*;
-import game.setup.InputManager;
+import game.managers.InputManager;
 
 import java.util.Scanner;
 

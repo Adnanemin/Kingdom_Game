@@ -63,7 +63,6 @@ public class RuleEngine {
 
             if (condition){
                 System.out.println("\nRule Triggered: " + r);
-                // *** OVERLOADED METOT KULLANIMI ***
                 applyEffect(kingdom, r);
             }
         }

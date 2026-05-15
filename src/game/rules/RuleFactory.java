@@ -1,7 +1,7 @@
 package game.rules;
 
 import game.exceptions.InvalidRuleException;
-import game.setup.InputManager;
+import game.managers.InputManager;
 
 import java.util.Scanner;
 

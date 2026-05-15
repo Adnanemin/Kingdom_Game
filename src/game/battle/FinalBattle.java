@@ -3,6 +3,7 @@ package game.battle;
 import game.Kingdom;
 import game.buildings.Wall;
 import game.buildings.Building;
+import game.util.Outcome;
 
 public class FinalBattle {
 
@@ -14,9 +15,9 @@ public class FinalBattle {
         this.enemy = enemy;
     }
 
-    public boolean startBattle(){
+    public Outcome<Integer> startBattle(){
 
-        // Intro
+        // Pre-battle intro with narrator
         BattleNarrator.printPreBattleIntro(player, enemy);
         System.out.println("\n===== FINAL BATTLE BEGINS! =====");
 
@@ -25,18 +26,21 @@ public class FinalBattle {
 
         // Wall bonus
         for (Building b : player.getBuildings()){
-            if(b instanceof Wall w){
-                System.out.println("Your wall reinforces your defenses! (+" + w.getDefenceBonus() + ")");
+            if (b instanceof Wall w){
+                System.out.println(
+                        "Your Wall reinforces your defenses! (+" + w.getDefenceBonus() + ")"
+                );
                 playerPower += w.getDefenceBonus();
             }
         }
 
-        // Happiness bonus
+        // Happiness bonus / malus
         int happiness = player.getHappiness();
-        if(happiness > 70){
+        if (happiness > 70){
             System.out.println("High morale boosts your army! (+6)");
             playerPower += 6;
-        } else if (happiness < 30){
+        }
+        else if (happiness < 30){
             System.out.println("Low morale weakens your army... (-6)");
             playerPower -= 6;
         }
@@ -47,9 +51,12 @@ public class FinalBattle {
 
         boolean playerWon = playerPower >= enemyPower;
 
-        // Story about the outcome
+        // Show story-style result
         BattleNarrator.printBattleOutcome(playerWon, player, enemy);
 
-        return playerWon;
+        // Calculate power difference (this becomes Outcome<Integer> detail)
+        int powerDifference = playerPower - enemyPower;
+
+        return new Outcome<>(playerWon, powerDifference);
     }
 }
