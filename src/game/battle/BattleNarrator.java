@@ -4,8 +4,6 @@ import game.Kingdom;
 import java.util.Scanner;
 
 public class BattleNarrator {
-    private BattleNarrator(){}
-
     public static void printPreBattleIntro(Kingdom player, Kingdom enemy) {
         System.out.println("\n====================================================");
         System.out.println("        THE FINAL BATTLE FOR YOUR KINGDOM");

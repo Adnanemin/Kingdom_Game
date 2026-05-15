@@ -1,11 +1,11 @@
-package game.units;
+#ffffffpackage game.units;
 
 public abstract class Unit {
-    protected String name;
-    protected int attack;
-    protected int defence;
-    protected int foodUpkeep;
-    protected int cost;
+    private final String name;
+    private int attack;
+    private int defence;
+    private int foodUpkeep;
+    private int cost;
 
     //---------------
     // Constructor
