@@ -42,7 +42,7 @@ public class Kingdom {
 
     private int housingCapacity;
     private final List<Building> buildings;
-    private final Army army; 
+    private final Army army;
 
     private final Random random = new Random();
 
@@ -87,17 +87,20 @@ public class Kingdom {
     // -------------------------
     // Public daily logic
     // -------------------------
-    public void applyDailyChanges(double taxRate) {
+    public List<String> applyDailyChanges(double taxRate) {
+        List<String> messages = new ArrayList<>();
 
         applyBuildingEffects();
         applyTaxStep(taxRate);
         applyFoodStep();
         handleStarvation();
         handleHappinessMigration();
-        handleRandomPopulationGrowth();
+        messages.add(handleRandomPopulationGrowth());
 
         recalculateHousingCapacity();
-        enforceHousingCapacity();
+        enforceHousingCapacity(messages);
+
+        return messages;
     }
 
     // -------------------------
@@ -142,18 +145,19 @@ public class Kingdom {
         }
     }
 
-    private void handleRandomPopulationGrowth() {
-        if (population <= 0) return;
+    private String handleRandomPopulationGrowth() {
+        if (population <= 0) {
+            return null;
+        }
 
         if (happiness > 50) {
             int chance = Math.min(happiness - 40, 50);
             if (random.nextInt(100) < chance) {
                 changePopulation(1);
-                System.out.println("\n Daily population change: (+1)");
-                return;
+                return "\n Daily population change: (+1)";
             }
         }
-        System.out.println("\nNo population growth today.");
+        return "\nNo population growth today.";
     }
 
     // -------------------------
@@ -163,21 +167,19 @@ public class Kingdom {
         int capacity = 0;
 
         for (Building b : buildings) {
-            if (b instanceof SmallHouse sh) {
-                capacity += sh.getCapacity();
-            } else if (b instanceof LargeHouse lh) {
-                capacity += lh.getCapacity();
+            if (b instanceof House h) {
+                capacity += h.getCapacity();
             }
         }
 
         this.housingCapacity = capacity;
     }
 
-    public void enforceHousingCapacity() {
+    public void enforceHousingCapacity(List<String> messages) {
         if (population > housingCapacity) {
             int lost = population - housingCapacity;
             population = housingCapacity;
-            System.out.println("\n" + lost + " people left due to lack of housing.");
+            messages.add("\n" + lost + " people left due to lack of housing.");
         }
     }
 

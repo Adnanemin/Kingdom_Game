@@ -10,6 +10,13 @@ public class SmallHouse extends House {
         // cost = 20 golds
         // capacity = 5
     }
+
+    // Status indicator
+    @Override
+    public boolean shouldAppearInStatus(){
+        return false;
+    }
+
     //--------------------------
     // Daily Effect
     //--------------------------

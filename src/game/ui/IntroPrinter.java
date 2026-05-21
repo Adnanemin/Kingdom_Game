@@ -19,6 +19,6 @@ public class IntroPrinter {
 
                 The future of your land depends on every choice you make.
                 """);
-        System.out.println("===============================");
+        System.out.print("===============================");
     }
 }

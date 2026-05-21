@@ -12,21 +12,30 @@ public class StatusPrinter {
     }
 
     public void printStatus() {
-        System.out.println("\n====== KINGDOM STATUS ======");
-        System.out.println("Kingdom: " + kingdom.getName());
-        System.out.println("Gold: " + kingdom.getGold());
-        System.out.println("Food: " + kingdom.getFood());
-        System.out.println("Population/Capacity " + kingdom.getPopulation() + " / " + kingdom.getHousingCapacity());
-        System.out.println("Happiness: " + kingdom.getHappiness());
-        System.out.println("Army Power: " + kingdom.getArmy().getTotalPower());
+        String[] statusItems = {
+                "Kingdom: " + kingdom.getName(),
+                "Gold: " + kingdom.getGold(),
+                "Food: " + kingdom.getFood(),
+                "Population/Capacity " + kingdom.getPopulation() +  " / " + kingdom.getHousingCapacity(),
+                "Happiness: " + kingdom.getHappiness(),
+                "Army Power: " + kingdom.getArmy().getTotalPower(),
+        };
+
+        for(int i = 0; i < statusItems.length; i++){
+            System.out.println((i + 1) + ". " + statusItems[i]);
+        }
 
         System.out.println("\nBuildings:");
         if (kingdom.getBuildings().isEmpty()) {
-            System.out.println("\nNone");
+            System.out.println("\nNone\n");
         } else {
             for (Building b : kingdom.getBuildings()) {
+                if(!b.shouldAppearInStatus()){
+                    continue;
+                }
                 System.out.println("- " + b.getName());
             }
+            System.out.println();
         }
     }
 }

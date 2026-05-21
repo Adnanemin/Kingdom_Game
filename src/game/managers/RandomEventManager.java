@@ -2,43 +2,47 @@ package game.managers;
 
 import game.events.*;
 import game.Kingdom;
+import game.setup.Difficulty;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RandomEventManager {
+
     private final List<RandomEvent> events = new ArrayList<>();
     private final Random random = new Random();
-
-    // Percentage of the chosen event that depends on the difficulty
     private final int triggerChancePercentage;
 
-    public RandomEventManager(int difficulty){
-        this.triggerChancePercentage = switch (difficulty){
-            case 1 -> 20;
-            case 2 -> 30;
-            case 3 -> 40;
-            default -> 20;
-        };
+    public RandomEventManager(Difficulty difficulty) {
+        this.triggerChancePercentage = difficulty.getRandomEventTriggerPercent();
+        registerDefaultEvents();
     }
-    // Adding the events in events list
-    public void addEvent(RandomEvent event){
+
+    private void registerDefaultEvents() {
+        addEvent(new GoodHarvest());
+        addEvent(new ImmigrantWave());
+        addEvent(new BanditAttack());
+        addEvent(new ReinforcementArrival());
+        addEvent(new Plague());
+        addEvent(new Festival());
+    }
+
+    public void addEvent(RandomEvent event) {
         events.add(event);
     }
-    public void tryTrigger(Kingdom kingdom){
 
-        // Check if the list empty
-        if(events.isEmpty()) return;
-
-        int roll = random.nextInt(100) + 1;
-
-        // No event came up
-        if(roll > triggerChancePercentage){
+    public void tryTrigger(Kingdom kingdom) {
+        if (events.isEmpty()) {
             return;
         }
 
-        // Chooses an event
+        int roll = random.nextInt(100) + 1;
+
+        if (roll > triggerChancePercentage) {
+            return;
+        }
+
         RandomEvent event = events.get(random.nextInt(events.size()));
         System.out.println("\n===== RANDOM EVENT! =====");
         event.apply(kingdom);

@@ -2,8 +2,8 @@ package game.units;
 
 public abstract class Unit {
     private final String name;
-    private int attack;
-    private int defense;
+    private final int attack;
+    private final int defense;
     private final int foodUpkeep;
     private final int cost;
 

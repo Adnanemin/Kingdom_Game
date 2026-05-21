@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GameEngine" type="Application" factoryName="Application" editBeforeRun="true">
+    <option name="MAIN_CLASS_NAME" value="game.GameEngine" />
+    <module name="Kingdom_Game" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

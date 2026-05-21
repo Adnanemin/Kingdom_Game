@@ -1,6 +1,7 @@
 package game.rules;
 
 import game.Kingdom;
+import game.exceptions.InvalidTaxRateException;
 import game.managers.TaxManager;
 
 import java.util.List;
@@ -58,8 +59,20 @@ public class RuleEngine {
         System.out.println("\n[Custom Rule Evaluation]");
 
         for (ParsedRule r : rules){
-            int currentValue = getAttributeValue(kingdom, r.getConditionAttribute());
-            boolean condition = evaluate(currentValue, r.getOperator(), r.getConditionValue());
+            String attr = r.getConditionAttribute();
+            if (!isKnownAttribute(attr)) {
+                System.out.println("\n[Rule Warning] Skipping rule with unknown attribute: " + attr);
+                continue;
+            }
+
+            String op = r.getOperator();
+            if (!isKnownOperator(op)) {
+                System.out.println("\n[Rule Warning] Skipping rule with unknown operator: " + op);
+                continue;
+            }
+
+            int currentValue = getAttributeValue(kingdom, attr);
+            boolean condition = evaluate(currentValue, op, r.getConditionValue());
 
             if (condition){
                 System.out.println("\nRule Triggered: " + r);
@@ -72,6 +85,20 @@ public class RuleEngine {
     // Helpers
     // ----------
 
+    private boolean isKnownAttribute(String attr) {
+        return switch (attr) {
+            case "food", "gold", "happiness", "population", "tax" -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isKnownOperator(String op) {
+        return switch (op) {
+            case "<", "<=", "==", ">=", ">" -> true;
+            default -> false;
+        };
+    }
+
     private int getAttributeValue(Kingdom kingdom, String attr){
         return switch (attr){
             case "food"       -> kingdom.getFood();
@@ -79,7 +106,7 @@ public class RuleEngine {
             case "happiness"  -> kingdom.getHappiness();
             case "population" -> kingdom.getPopulation();
             case "tax"        -> (int) Math.round(taxManager.getTaxRate() * 100); //store as %
-            default -> throw new IllegalArgumentException("\nUnknown attribute: " + attr);
+            default -> 0;
         };
     }
 
@@ -90,7 +117,7 @@ public class RuleEngine {
             case "==" -> current == target;
             case ">=" -> current >= target;
             case ">"  -> current > target;
-            default   -> throw new IllegalArgumentException("\nUnknown operator: " + op);
+            default   -> false;
         };
     }
 
@@ -100,7 +127,12 @@ public class RuleEngine {
 
     // 1) ParsedRule
     private void applyEffect(Kingdom kingdom, ParsedRule rule){
-        applyEffect(kingdom, rule.getEffectAttribute(), rule.getEffectValue());
+        String attr = rule.getEffectAttribute();
+        if (!isKnownAttribute(attr)) {
+            System.out.println("\n[Rule Warning] Skipping effect with unknown attribute: " + attr);
+            return;
+        }
+        applyEffect(kingdom, attr, rule.getEffectValue());
     }
 
     // 2) Old version: attribute + amount
@@ -113,9 +145,13 @@ public class RuleEngine {
             case "tax" -> {
                 int currentPercentage = (int) Math.round(taxManager.getTaxRate() * 100);
                 int newPercentage = currentPercentage + amount;
-                taxManager.updateTaxRate(newPercentage);
+                try {
+                    taxManager.updateTaxRate(newPercentage);
+                } catch (InvalidTaxRateException e) {
+                    System.out.println("\n[Rule Warning] Tax effect skipped: " + e.getMessage());
+                }
             }
-            default -> throw new IllegalArgumentException("\nUnknown attribute: " + attr);
+            default -> System.out.println("\n[Rule Warning] Skipping effect with unknown attribute: " + attr);
         }
     }
 }

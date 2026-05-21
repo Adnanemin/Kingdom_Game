@@ -12,6 +12,12 @@ public class LargeHouse extends House {
         // capacity = 15
     }
 
+    // Status indicator
+    @Override
+    public boolean shouldAppearInStatus(){
+        return false;
+    }
+
     //--------------------------
     // Daily Effect
     //--------------------------

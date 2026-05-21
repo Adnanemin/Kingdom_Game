@@ -1,7 +1,8 @@
 package game;
 
 import game.battle.FinalBattle;
-import game.exceptions.*;
+import game.exceptions.GameException;
+import game.exceptions.KingdomCollapsedException;
 import game.setup.*;
 import game.managers.*;
 import game.ui.*;
@@ -9,6 +10,7 @@ import game.events.*;
 import game.rules.*;
 import game.util.Outcome;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class GameEngine {
@@ -17,20 +19,16 @@ public class GameEngine {
     private final Kingdom playerKingdom;
     private final Kingdom enemyKingdom;
 
-
     private final RebellionManager rebellionManager;
     private final TaxManager taxManager;
     private final RuleEngine ruleEngine;
-
-    private boolean running = true;
-
-    private int currentDay = 1;
-    private static final int battleDay = 30;
 
     private final BuildingManager buildingManager;
     private final UnitTrainingManager unitTrainingManager;
     private final StatusPrinter statusPrinter;
     private final RandomEventManager randomEventManager;
+
+    private final GameSession session;
 
     // -----------------------------------
     // Main
@@ -45,33 +43,21 @@ public class GameEngine {
     // -----------------------------------
     public GameEngine() {
         scanner = new Scanner(System.in);
-        //Intro printer
         IntroPrinter.printIntro();
-        // Ask difficulty
-        int difficulty = DifficultyManager.askDifficulty(scanner);
+        Difficulty difficulty = DifficultyManager.askDifficulty(scanner);
 
-        // Create kingdoms using factory
         enemyKingdom = KingdomFactory.createKingdom(difficulty);
         playerKingdom = KingdomFactory.createKingdom(scanner);
 
-        // Managers
+        session = new GameSession(difficulty);
+
         buildingManager = new BuildingManager(scanner, playerKingdom);
         unitTrainingManager = new UnitTrainingManager(scanner, playerKingdom);
         statusPrinter = new StatusPrinter(playerKingdom);
         rebellionManager = new RebellionManager(playerKingdom, difficulty);
         taxManager = new TaxManager();
-
-        //RuleEngine
         ruleEngine = new RuleEngine(taxManager);
-
-        // Random Events
         randomEventManager = new RandomEventManager(difficulty);
-        randomEventManager.addEvent(new GoodHarvest());
-        randomEventManager.addEvent(new ImmigrantWave());
-        randomEventManager.addEvent(new BanditAttack());
-        randomEventManager.addEvent(new ReinforcementArrival());
-        randomEventManager.addEvent(new Plague());
-        randomEventManager.addEvent(new Festival());
     }
 
     // -----------------------------------
@@ -81,9 +67,9 @@ public class GameEngine {
         System.out.println("\nWelcome, Ruler of " + playerKingdom.getName() + "!");
         System.out.println("Prepare your Kingdom for the coming war...\n");
 
-        while (running) {
-            MenuPrinter.printMainMenu(currentDay);
-            int choice = InputManager.getInt(scanner,"\nYour choice: ");
+        while (session.isRunning()) {
+            MenuPrinter.printMainMenu(session.getCurrentDay());
+            int choice = InputManager.getInt(scanner, "\nYour choice: ");
             handleMenuChoice(choice);
         }
 
@@ -91,21 +77,31 @@ public class GameEngine {
     }
 
     private void handleMenuChoice(int choice) {
+        switch (choice) {
+            case 1 -> statusPrinter.printStatus();
+            case 2 -> runBuildingMenu();
+            case 3 -> runPlayerAction(unitTrainingManager::trainUnit);
+            case 4 -> runPlayerAction(this::setTaxRate);
+            case 5 -> nextDay();
+            case 6 -> RuleMenuPrinter.manageCustomRule(scanner, ruleEngine);
+            case 7 -> session.endGame();
+            default -> System.out.println("Invalid choice!");
+        }
+    }
+
+    private void runBuildingMenu() {
         try {
-            switch (choice) {
-                case 1 -> statusPrinter.printStatus();
-                case 2 -> buildingManager.buildBuilding();
-                case 3 -> unitTrainingManager.trainUnit();
-                case 4 -> setTaxRate();
-                case 5 -> nextDay();
-                case 6 -> RuleMenuPrinter.manageCustomRule(scanner, ruleEngine);
-                case 7 -> running = false;
-                default -> System.out.println("Invalid choice!");
-            }
-        }catch (InsufficientResourceException e){
-            System.out.println("\n[Resource Error] " + e.getMessage());
-        }catch (IllegalArgumentException e){
-            System.out.println("\n[Input Error] " + e.getMessage());
+            buildingManager.buildBuilding();
+        } catch (GameException e) {
+            System.out.println("\n[Game Error] " + e.getMessage());
+        }
+    }
+
+    private void runPlayerAction(Runnable action) {
+        try {
+            action.run();
+        } catch (GameException e) {
+            System.out.println("\n[Game Error] " + e.getMessage());
         }
     }
 
@@ -122,30 +118,38 @@ public class GameEngine {
     // -----------------------------------
     private void nextDay() {
         System.out.println("\nA new day begins...");
-        // Daily kingdom updates(taxes, food, gold ...)
-        playerKingdom.applyDailyChanges(taxManager.getTaxRate());
+        try {
+            List<String> dailyMessages = playerKingdom.applyDailyChanges(taxManager.getTaxRate());
+            printDailyMessages(dailyMessages);
 
-        //Rebellion Check
-        rebellionManager.checkRebellion();
+            rebellionManager.checkRebellion();
 
-        // Check random events
-        randomEventManager.tryTrigger(playerKingdom);
+            randomEventManager.tryTrigger(playerKingdom);
+            ruleEngine.applyRules(playerKingdom);
 
-        // Apply custom rules
-        ruleEngine.applyRules(playerKingdom);
+            session.advanceDay();
+            System.out.println("\nDay: " + session.getCurrentDay());
 
-        // Advance day
-        currentDay++;
-        System.out.println("\nDay: " + currentDay);
+            if (session.isBattleDue()) {
+                finalBattle();
+                session.endGame();
+                return;
+            }
 
-        // Trigger final battle
-        if (currentDay >= battleDay) {
-            finalBattle();
-            running = false;
-            return;
+            statusPrinter.printStatus();
+        } catch (KingdomCollapsedException e) {
+            System.out.println("\n" + e.getMessage());
+            System.out.println("GAME OVER");
+            session.endGame();
         }
+    }
 
-        statusPrinter.printStatus();
+    private void printDailyMessages(List<String> messages) {
+        for (String message : messages) {
+            if (message != null) {
+                System.out.println(message);
+            }
+        }
     }
 
     // -----------------------------------
@@ -156,7 +160,6 @@ public class GameEngine {
 
         Outcome<Integer> outcome = fb.startBattle();
         boolean playerWon = outcome.isSuccess();
-        int powerDiff = outcome.getDetails();
         System.out.println("\n===== BATTLE RESULT =====");
         if (playerWon) {
             System.out.println("VICTORY! You defeated the Dark Empire!");

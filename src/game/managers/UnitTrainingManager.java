@@ -4,6 +4,10 @@ import game.Kingdom;
 import game.units.*;
 import game.buildings.Barrack;
 import game.buildings.Stable;
+import game.exceptions.InsufficientPopulationException;
+import game.exceptions.InsufficientResourceException;
+import game.exceptions.InvalidBuildingException;
+import game.exceptions.PrerequisiteNotMetException;
 
 import java.util.Scanner;
 
@@ -21,53 +25,51 @@ public class UnitTrainingManager {
         System.out.println("\n====== TRAIN UNITS ======");
         System.out.println("Current gold: " + kingdom.getGold());
         System.out.println("Population available: " + kingdom.getPopulation());
-        System.out.println("1. Soldier (10 gold, 1 pop)");
-        System.out.println("2. Archer (10 gold, 1 pop)");
-        System.out.println("3. Cavalry (20 gold, 1 pop)");
-        System.out.println("4. Cancel");
 
-        int choice = getIntInput("\nSelect unit: ");
+        String[] menuItems = {
+                "Soldier (10 gold, 1 pop)",
+                "Archer (10 gold, 1 pop)",
+                "Cavalry (20 gold, 1 pop)",
+                "Cancel"
+        };
+        for(int i = 0; i < menuItems.length; i++){
+            System.out.println((i + 1) + ". " + menuItems[i]);
+        }
+
+        int choice = InputManager.getInt(scanner, "\nSelect unit: ");
         Unit unit = null;
 
         switch (choice) {
             case 1 -> {
                 if (!kingdom.hasBuilding(Barrack.class)) {
-                    System.out.println("\nYou need a Barrack to train Soldiers!");
-                    return;
+                    throw new PrerequisiteNotMetException("You need a Barrack to train Soldiers!");
                 }
                 unit = new Soldier();
             }
             case 2 -> {
                 if (!kingdom.hasBuilding(Barrack.class)) {
-                    System.out.println("\nYou need a Barrack to train Archers!");
-                    return;
+                    throw new PrerequisiteNotMetException("You need a Barrack to train Archers!");
                 }
                 unit = new Archer();
             }
             case 3 -> {
                 if (!kingdom.hasBuilding(Stable.class)) {
-                    System.out.println("\nYou need a Stable to train Cavalry!");
-                    return;
+                    throw new PrerequisiteNotMetException("You need a Stable to train Cavalry!");
                 }
                 unit = new Cavalry();
             }
             case 4 -> { return; }
-            default -> {
-                System.out.println("\nInvalid choice!");
-                return;
-            }
+            default -> throw new InvalidBuildingException("Invalid choice!");
         }
 
         int cost = unit.getCost();
 
         if (kingdom.getGold() < cost) {
-            System.out.println("\nNot enough gold!");
-            return;
+            throw new InsufficientResourceException("Not enough gold!");
         }
 
         if (kingdom.getPopulation() < 1) {
-            System.out.println("\nNot enough population!");
-            return;
+            throw new InsufficientPopulationException("Not enough population!");
         }
 
         kingdom.changeGold(-cost);
@@ -75,14 +77,5 @@ public class UnitTrainingManager {
         kingdom.getArmy().addUnit(unit);
 
         System.out.println(unit.getName() + " trained!");
-    }
-
-    private int getIntInput(String message) {
-        System.out.print(message);
-        while (!scanner.hasNextInt()) {
-            System.out.print("\nInvalid input. Try again: ");
-            scanner.next();
-        }
-        return scanner.nextInt();
     }
 }

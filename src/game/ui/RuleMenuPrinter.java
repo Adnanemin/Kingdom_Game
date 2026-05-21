@@ -11,11 +11,16 @@ public class RuleMenuPrinter {
         boolean back = false;
         while (!back){
             System.out.println("\n===== Custom Rules =====");
-            System.out.println("1. Add new rule");
-            System.out.println("2. List active rules");
-            System.out.println("3. Delete a specific rule");
-            System.out.println("4. Delete ALL rules");
-            System.out.println("5. Back to main menu");
+            String[] menuItems = {
+                    "Add new rule",
+                    "List active rules",
+                    "Delete a specific rule",
+                    "Delete ALL rules",
+                    "Back to main menu"
+            };
+            for(int i = 0; i < menuItems.length; i++){
+                System.out.println((i + 1) + ". " + menuItems[i]);
+            }
 
             int choice = InputManager.getInt(scanner, "\nYour choice: ");
 

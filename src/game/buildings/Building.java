@@ -22,6 +22,10 @@ public abstract class Building {
     public String getName() {return name; }
     public int getCost() {return cost; }
 
+    // Status indicator
+    public boolean shouldAppearInStatus(){
+        return true;
+    }
     //--------------------------
     // Daily effect
     //--------------------------
