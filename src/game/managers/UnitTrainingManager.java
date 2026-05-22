@@ -42,19 +42,19 @@ public class UnitTrainingManager {
         switch (choice) {
             case 1 -> {
                 if (!kingdom.hasBuilding(Barrack.class)) {
-                    throw new PrerequisiteNotMetException("You need a Barrack to train Soldiers!");
+                    throw new PrerequisiteNotMetException("You need a " + new Barrack().getName() + " to train " + new Soldier().getName() + " !");
                 }
                 unit = new Soldier();
             }
             case 2 -> {
                 if (!kingdom.hasBuilding(Barrack.class)) {
-                    throw new PrerequisiteNotMetException("You need a Barrack to train Archers!");
+                    throw new PrerequisiteNotMetException("You need a " + new Barrack().getName() + " to train " + new Archer().getName() + " !");
                 }
                 unit = new Archer();
             }
             case 3 -> {
                 if (!kingdom.hasBuilding(Stable.class)) {
-                    throw new PrerequisiteNotMetException("You need a Stable to train Cavalry!");
+                    throw new PrerequisiteNotMetException("You need a " + new Stable().getName() + " to train " + new Cavalry().getName() + " !");
                 }
                 unit = new Cavalry();
             }

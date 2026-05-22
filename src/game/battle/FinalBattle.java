@@ -34,7 +34,7 @@ public class FinalBattle {
             }
         }
 
-        // Happiness bonus / malus
+        // Happiness bonus / penalty
         int happiness = player.getHappiness();
         if (happiness > 70){
             System.out.println("High morale boosts your army! (+6)");

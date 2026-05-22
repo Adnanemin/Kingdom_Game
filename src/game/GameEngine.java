@@ -77,15 +77,20 @@ public class GameEngine {
     }
 
     private void handleMenuChoice(int choice) {
-        switch (choice) {
-            case 1 -> statusPrinter.printStatus();
-            case 2 -> runBuildingMenu();
-            case 3 -> runPlayerAction(unitTrainingManager::trainUnit);
-            case 4 -> runPlayerAction(this::setTaxRate);
-            case 5 -> nextDay();
-            case 6 -> RuleMenuPrinter.manageCustomRule(scanner, ruleEngine);
-            case 7 -> session.endGame();
-            default -> System.out.println("Invalid choice!");
+        Runnable[] actions = {
+                statusPrinter::printStatus,
+                this::runBuildingMenu,
+                () -> runPlayerAction(unitTrainingManager::trainUnit),
+                () -> runPlayerAction(this::setTaxRate),
+                this::nextDay,
+                () -> RuleMenuPrinter.manageCustomRule(scanner, ruleEngine),
+                session::endGame
+        };
+
+        if (choice >= 1 && choice <= actions.length) {
+            actions[choice - 1].run();
+        } else {
+            System.out.println("Invalid choice!\n");
         }
     }
 
