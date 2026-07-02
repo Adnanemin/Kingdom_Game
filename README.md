@@ -70,14 +70,6 @@ This project demonstrates the following OOP concepts:
 
 ---
 
-## Technologies
-
-- Java
-- Object-Oriented Programming
-- Console-based application
-
----
-
 ## Design Highlights
 
 The project follows a modular architecture where responsibilities are separated into dedicated manager classes. Game state is maintained by the `Kingdom` and `GameSession` classes, while game mechanics such as random events, building construction, taxation, and unit training are delegated to specialized managers. Difficulty configuration is encapsulated within the `Difficulty` enum, and custom exceptions are used to handle invalid game operations in a controlled manner.
