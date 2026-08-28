@@ -1,6 +1,8 @@
 package game.units;
 
-public abstract class Unit {
+import game.util.Purchasable;
+
+public abstract class Unit implements Purchasable {
     private final String name;
     private final int attack;
     private final int defense;
@@ -21,10 +23,12 @@ public abstract class Unit {
     //---------------
     // Getters
     //---------------
+    @Override
     public String getName() {return name; }
     public int getAttack() {return attack; }
     public int getDefense() {return defense; }
     public int getFoodUpKeep() {return foodUpkeep; }
+    @Override
     public int getCost() {return cost; }
 
     //------------------------------

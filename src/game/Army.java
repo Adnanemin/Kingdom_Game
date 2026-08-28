@@ -3,6 +3,7 @@ package game;
 import game.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Army {
@@ -23,7 +24,7 @@ public class Army {
     // Getter
     // -------------------------
     public List<Unit> getUnits() {
-        return units;
+        return Collections.unmodifiableList(units);
     }
 
     // -------------------------

@@ -4,9 +4,30 @@ import game.Kingdom;
 import game.units.*;
 
 public enum Difficulty {
-    EASY(1, -10, 20),
-    NORMAL(2, 0, 30),
-    HARD(3, 10, 40);
+    EASY(1, -10, 20) {
+        @Override
+        public void configureEnemyArmy(Kingdom enemy) {
+            enemy.getArmy().addUnit(new Soldier(), 5);
+            enemy.getArmy().addUnit(new Archer(), 5);
+            enemy.getArmy().addUnit(new Cavalry(), 3);
+        }
+    },
+    NORMAL(2, 0, 30) {
+        @Override
+        public void configureEnemyArmy(Kingdom enemy) {
+            enemy.getArmy().addUnit(new Soldier(), 10);
+            enemy.getArmy().addUnit(new Archer(), 5);
+            enemy.getArmy().addUnit(new Cavalry(), 5);
+        }
+    },
+    HARD(3, 10, 40) {
+        @Override
+        public void configureEnemyArmy(Kingdom enemy) {
+            enemy.getArmy().addUnit(new Soldier(), 10);
+            enemy.getArmy().addUnit(new Archer(), 10);
+            enemy.getArmy().addUnit(new Cavalry(), 10);
+        }
+    };
 
     private final int menuChoice;
     private final int rebellionChanceModifier;
@@ -35,23 +56,5 @@ public enum Difficulty {
         return NORMAL;
     }
 
-    public void configureEnemyArmy(Kingdom enemy) {
-        switch (this) {
-            case EASY -> {
-                enemy.getArmy().addUnit(new Soldier(), 5);
-                enemy.getArmy().addUnit(new Archer(), 5);
-                enemy.getArmy().addUnit(new Cavalry(), 3);
-            }
-            case HARD -> {
-                enemy.getArmy().addUnit(new Soldier(), 10);
-                enemy.getArmy().addUnit(new Archer(), 10);
-                enemy.getArmy().addUnit(new Cavalry(), 10);
-            }
-            default -> {
-                enemy.getArmy().addUnit(new Soldier(), 10);
-                enemy.getArmy().addUnit(new Archer(), 5);
-                enemy.getArmy().addUnit(new Cavalry(), 5);
-            }
-        }
-    }
+    public abstract void configureEnemyArmy(Kingdom enemy);
 }

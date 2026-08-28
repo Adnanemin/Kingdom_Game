@@ -2,7 +2,6 @@ package game.managers;
 
 import game.Kingdom;
 import game.buildings.*;
-import game.exceptions.InsufficientResourceException;
 import game.exceptions.InvalidBuildingException;
 import game.exceptions.PrerequisiteNotMetException;
 
@@ -72,11 +71,8 @@ public class BuildingManager {
             }
         }
 
-        if (kingdom.getGold() < newBuilding.getCost()) {
-            throw new InsufficientResourceException(
-                    "Not enough gold to build " + newBuilding.getName()
-            );
-        }
+        // Shared affordability check, defined once on Purchasable
+        newBuilding.requireAffordable(kingdom.getGold());
 
         // Deduct cost and add building
         kingdom.changeGold(-newBuilding.getCost());

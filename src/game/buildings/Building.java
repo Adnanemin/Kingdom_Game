@@ -1,8 +1,9 @@
 package game.buildings;
 
 import game.Kingdom;
+import game.util.Purchasable;
 
-public abstract class Building {
+public abstract class Building implements Purchasable {
     //-----------
     // Fields
     //-----------
@@ -19,7 +20,9 @@ public abstract class Building {
     //--------------------------
     // Getters
     //--------------------------
+    @Override
     public String getName() {return name; }
+    @Override
     public int getCost() {return cost; }
 
     // Status indicator

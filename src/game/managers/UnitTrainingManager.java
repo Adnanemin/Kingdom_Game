@@ -5,7 +5,6 @@ import game.units.*;
 import game.buildings.Barrack;
 import game.buildings.Stable;
 import game.exceptions.InsufficientPopulationException;
-import game.exceptions.InsufficientResourceException;
 import game.exceptions.InvalidBuildingException;
 import game.exceptions.PrerequisiteNotMetException;
 
@@ -62,17 +61,14 @@ public class UnitTrainingManager {
             default -> throw new InvalidBuildingException("Invalid choice!");
         }
 
-        int cost = unit.getCost();
-
-        if (kingdom.getGold() < cost) {
-            throw new InsufficientResourceException("Not enough gold!");
-        }
+        // Shared affordability check, defined once on Purchasable
+        unit.requireAffordable(kingdom.getGold());
 
         if (kingdom.getPopulation() < 1) {
             throw new InsufficientPopulationException("Not enough population!");
         }
 
-        kingdom.changeGold(-cost);
+        kingdom.changeGold(-unit.getCost());
         kingdom.changePopulation(-1);
         kingdom.getArmy().addUnit(unit);
 

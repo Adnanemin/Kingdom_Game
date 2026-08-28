@@ -1,21 +1,35 @@
 package game.rules;
 
 import game.Kingdom;
-import game.exceptions.InvalidTaxRateException;
 import game.managers.TaxManager;
+import game.rules.attributes.*;
 
-import java.util.List;
 import java.util.ArrayList;
-
-// Stores custom rules and applies them to the Kingdom each day.
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RuleEngine {
 
     private final List<ParsedRule> rules = new ArrayList<>();
-    private final TaxManager taxManager;
+    private final Map<String, KingdomAttribute> attributes = new LinkedHashMap<>();
 
     public RuleEngine(TaxManager taxManager){
-        this.taxManager = taxManager;
+        registerDefaultAttributes(taxManager);
+    }
+
+    private void registerDefaultAttributes(TaxManager taxManager) {
+        registerAttribute(new FoodAttribute());
+        registerAttribute(new GoldAttribute());
+        registerAttribute(new HappinessAttribute());
+        registerAttribute(new PopulationAttribute());
+        registerAttribute(new TaxAttribute(taxManager));
+    }
+
+    // Registers a new attribute so it becomes usable in rules.
+    // New "mods" (extra tunable attributes) plug in here.
+    public void registerAttribute(KingdomAttribute attribute) {
+        attributes.put(attribute.getKey(), attribute);
     }
 
     public void addRule(ParsedRule rule){
@@ -59,9 +73,9 @@ public class RuleEngine {
         System.out.println("\n[Custom Rule Evaluation]");
 
         for (ParsedRule r : rules){
-            String attr = r.getConditionAttribute();
-            if (!isKnownAttribute(attr)) {
-                System.out.println("\n[Rule Warning] Skipping rule with unknown attribute: " + attr);
+            KingdomAttribute conditionAttribute = attributes.get(r.getConditionAttribute());
+            if (conditionAttribute == null) {
+                System.out.println("\n[Rule Warning] Skipping rule with unknown attribute: " + r.getConditionAttribute());
                 continue;
             }
 
@@ -71,7 +85,7 @@ public class RuleEngine {
                 continue;
             }
 
-            int currentValue = getAttributeValue(kingdom, attr);
+            int currentValue = conditionAttribute.getValue(kingdom);
             boolean condition = evaluate(currentValue, op, r.getConditionValue());
 
             if (condition){
@@ -85,28 +99,10 @@ public class RuleEngine {
     // Helpers
     // ----------
 
-    private boolean isKnownAttribute(String attr) {
-        return switch (attr) {
-            case "food", "gold", "happiness", "population", "tax" -> true;
-            default -> false;
-        };
-    }
-
     private boolean isKnownOperator(String op) {
         return switch (op) {
             case "<", "<=", "==", ">=", ">" -> true;
             default -> false;
-        };
-    }
-
-    private int getAttributeValue(Kingdom kingdom, String attr){
-        return switch (attr){
-            case "food"       -> kingdom.getFood();
-            case "gold"       -> kingdom.getGold();
-            case "happiness"  -> kingdom.getHappiness();
-            case "population" -> kingdom.getPopulation();
-            case "tax"        -> (int) Math.round(taxManager.getTaxRate() * 100); //store as %
-            default -> 0;
         };
     }
 
@@ -121,37 +117,12 @@ public class RuleEngine {
         };
     }
 
-    // ---------------------------
-    // Overloaded applyEffect(...)
-    // ---------------------------
-
-    // 1) ParsedRule
     private void applyEffect(Kingdom kingdom, ParsedRule rule){
-        String attr = rule.getEffectAttribute();
-        if (!isKnownAttribute(attr)) {
-            System.out.println("\n[Rule Warning] Skipping effect with unknown attribute: " + attr);
+        KingdomAttribute effectAttribute = attributes.get(rule.getEffectAttribute());
+        if (effectAttribute == null) {
+            System.out.println("\n[Rule Warning] Skipping effect with unknown attribute: " + rule.getEffectAttribute());
             return;
         }
-        applyEffect(kingdom, attr, rule.getEffectValue());
-    }
-
-    // 2) Old version: attribute + amount
-    private void applyEffect(Kingdom kingdom, String attr, int amount){
-        switch (attr){
-            case "food" -> kingdom.changeFood(amount);
-            case "gold" -> kingdom.changeGold(amount);
-            case "happiness" -> kingdom.changeHappiness(amount);
-            case "population" -> kingdom.changePopulation(amount);
-            case "tax" -> {
-                int currentPercentage = (int) Math.round(taxManager.getTaxRate() * 100);
-                int newPercentage = currentPercentage + amount;
-                try {
-                    taxManager.updateTaxRate(newPercentage);
-                } catch (InvalidTaxRateException e) {
-                    System.out.println("\n[Rule Warning] Tax effect skipped: " + e.getMessage());
-                }
-            }
-            default -> System.out.println("\n[Rule Warning] Skipping effect with unknown attribute: " + attr);
-        }
+        effectAttribute.applyEffect(kingdom, rule.getEffectValue());
     }
 }
