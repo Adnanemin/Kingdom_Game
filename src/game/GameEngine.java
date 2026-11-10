@@ -79,7 +79,7 @@ public class GameEngine {
     private void handleMenuChoice(int choice) {
         Runnable[] actions = {
                 statusPrinter::printStatus,
-                this::runBuildingMenu,
+                () -> runPlayerAction(buildingManager::buildBuilding),
                 () -> runPlayerAction(unitTrainingManager::trainUnit),
                 () -> runPlayerAction(this::setTaxRate),
                 this::nextDay,
@@ -91,14 +91,6 @@ public class GameEngine {
             actions[choice - 1].run();
         } else {
             System.out.println("Invalid choice!\n");
-        }
-    }
-
-    private void runBuildingMenu() {
-        try {
-            buildingManager.buildBuilding();
-        } catch (GameException e) {
-            System.out.println("\n[Game Error] " + e.getMessage());
         }
     }
 
