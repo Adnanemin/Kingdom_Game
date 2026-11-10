@@ -1,14 +1,14 @@
 package game.setup;
 
 import game.Kingdom;
+import game.managers.InputManager;
 
 import java.util.Scanner;
 
 public class KingdomFactory {
 
     public static Kingdom createKingdom(Scanner scanner) {
-        System.out.println("Name your Kingdom: ");
-        String name = scanner.nextLine();
+        String name = InputManager.getString(scanner, "\nName your Kingdom: ");
 
         if (name.isBlank()) {
             name = "My Kingdom";
