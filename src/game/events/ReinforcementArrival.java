@@ -2,11 +2,12 @@ package game.events;
 
 import game.Kingdom;
 import game.units.*;
-import java.util.List;
-import java.util.ArrayList;
 
 public class ReinforcementArrival implements RandomEvent {
 
+    private static final int SOLDIER_COUNT = 2;
+    private static final int ARCHER_COUNT = 1;
+    private static final int CAVALRY_COUNT = 1;
     @Override
     public String getName(){
         return "Reinforcement Arrival";
@@ -23,16 +24,12 @@ public class ReinforcementArrival implements RandomEvent {
         System.out.println(getDescription());
 
         // List of reinforcements
-        List<Unit> reinforcement = new ArrayList<>();
-        reinforcement.add(new Soldier());
-        reinforcement.add(new Soldier());
-        reinforcement.add(new Archer());
-        reinforcement.add(new Cavalry());
-
-        // Add via list overload
-        kingdom.getArmy().addUnit(reinforcement);
+        kingdom.getArmy().addUnit(Soldier::new, SOLDIER_COUNT);
+        kingdom.getArmy().addUnit(Archer::new, ARCHER_COUNT);
+        kingdom.getArmy().addUnit(Cavalry::new, CAVALRY_COUNT);
 
         System.out.println("\nReinforcements arrived to your army: ");
-        System.out.println("+2 Soldiers, +1 Archer, +1 Cavalry");
+        System.out.println("+" + SOLDIER_COUNT + " Soldiers, +" + ARCHER_COUNT + " Archer, +" + CAVALRY_COUNT + " Cavalry");
     }
+
 }

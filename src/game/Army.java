@@ -5,6 +5,7 @@ import game.units.Unit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Army {
 
@@ -41,9 +42,9 @@ public class Army {
     }
 
     // Overload: Add multiple units
-    public void addUnit(Unit unit, int count){
+    public void addUnit(Supplier<Unit> factory, int count){
         for (int i = 0; i < count; i ++){
-            addUnit(unit);
+            addUnit(factory.get());
         }
     }
 
