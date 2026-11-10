@@ -21,7 +21,7 @@ public class ImmigrantWave implements RandomEvent {
         int popBoost = 5;
         int hapChange = -2;
         kingdom.changePopulation(popBoost);
-        kingdom.changeHappiness(-2);
+        kingdom.changeHappiness(hapChange);
         System.out.println("Population + " + popBoost + " Happiness " + hapChange);
     }
 }
