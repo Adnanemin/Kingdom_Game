@@ -3,7 +3,6 @@ package game.managers;
 import game.Kingdom;
 import game.buildings.*;
 import game.exceptions.InvalidBuildingException;
-import game.exceptions.PrerequisiteNotMetException;
 
 import java.util.Scanner;
 
@@ -22,13 +21,13 @@ public class BuildingManager {
         System.out.println("\n====== BUILDING MENU ======");
         System.out.println("Current Gold: " + kingdom.getGold());
         String[] menuItems = {
-                "Farm (30)",
-                "Small House (Gold/Capacity: 20 / 5)",
-                "Large House (Gold/Capacity: 40 / 15)",
-                "Barracks (40)",
-                "Stable (60)",
-                "Bar (70)",
-                "Wall (70)",
+                "Farm (" + new Farm().getCost() + ")",
+                "Small House (Gold/Capacity: " + new SmallHouse().getCost() + " / " + new SmallHouse().getCapacity() + ")",
+                "Large House (Gold/Capacity: " + new LargeHouse().getCost() + " / " + new LargeHouse().getCapacity() + ")",
+                "Barracks (" + new Barrack().getCost() + ")",
+                "Stable (" + new Stable().getCost() + ")",
+                "Bar (" + new Bar().getCost() + ")",
+                "Wall (" + new Wall().getCost() + ")",
                 "Cancel"
         };
 
@@ -83,8 +82,8 @@ public class BuildingManager {
 
         System.out.println("\n" + newBuilding.getName() + " successfully built!");
 
-        if ((newBuilding instanceof SmallHouse || newBuilding instanceof LargeHouse) && kingdom.getHappiness() < 50){
-            throw  new PrerequisiteNotMetException("""
+        if (newBuilding instanceof House && kingdom.getHappiness() < 50){
+            System.out.println("""
                     \nWARNING!
                     Your happiness is below 50, new house will not give population growth for now.
                     """);
