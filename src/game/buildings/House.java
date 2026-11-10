@@ -9,7 +9,8 @@ public abstract class House extends Building{
         this.capacity = capacity;
     }
 
-    public int getCapacity(){
+    @Override
+    public int getHouseCapacity(){
         return capacity;
     }
 }

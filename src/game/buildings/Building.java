@@ -35,6 +35,11 @@ public abstract class Building implements Purchasable {
         return false;
     }
 
+    // How many people this building can house (0 for non-housing buildings)
+    public int getHouseCapacity(){
+        return 0;
+    }
+
     //--------------------------
     // Daily effect
     //--------------------------

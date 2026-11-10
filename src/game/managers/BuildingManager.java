@@ -22,8 +22,8 @@ public class BuildingManager {
         System.out.println("Current Gold: " + kingdom.getGold());
         String[] menuItems = {
                 "Farm (" + new Farm().getCost() + ")",
-                "Small House (Gold/Capacity: " + new SmallHouse().getCost() + " / " + new SmallHouse().getCapacity() + ")",
-                "Large House (Gold/Capacity: " + new LargeHouse().getCost() + " / " + new LargeHouse().getCapacity() + ")",
+                "Small House (Gold/Capacity: " + new SmallHouse().getCost() + " / " + new SmallHouse().getHouseCapacity() + ")",
+                "Large House (Gold/Capacity: " + new LargeHouse().getCost() + " / " + new LargeHouse().getHouseCapacity() + ")",
                 "Barracks (" + new Barrack().getCost() + ")",
                 "Stable (" + new Stable().getCost() + ")",
                 "Bar (" + new Bar().getCost() + ")",

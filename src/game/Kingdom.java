@@ -30,7 +30,6 @@ public class Kingdom {
     // Immutable properties
     // -------------------------
     private final String name;
-    private final boolean isEnemy;
 
     // -------------------------
     // Mutable state
@@ -49,9 +48,8 @@ public class Kingdom {
     // -------------------------
     // Constructor
     // -------------------------
-    public Kingdom(String name, boolean isEnemy) {
+    public Kingdom(String name) {
         this.name = name;
-        this.isEnemy = isEnemy;
 
         this.gold = INITIAL_GOLD;
         this.food = INITIAL_FOOD;
@@ -65,16 +63,33 @@ public class Kingdom {
     // -------------------------
     // Getters
     // -------------------------
-    public String getName() { return name; }
-    public boolean isEnemy() { return isEnemy; }
+    public String getName() {
+        return name;
+    }
 
-    public int getGold() { return gold; }
-    public int getFood() { return food; }
-    public int getPopulation() { return population; }
-    public int getHappiness() { return happiness; }
+    public int getGold() {
+        return gold;
+    }
 
-    public int getHousingCapacity() { return housingCapacity; }
-    public Army getArmy() { return army; }
+    public int getFood() {
+        return food;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public int getHappiness() {
+        return happiness;
+    }
+
+    public int getHousingCapacity() {
+        return housingCapacity;
+    }
+
+    public Army getArmy() {
+        return army;
+    }
 
     public List<Building> getBuildings() {
         return Collections.unmodifiableList(buildings);
@@ -167,9 +182,7 @@ public class Kingdom {
         int capacity = 0;
 
         for (Building b : buildings) {
-            if (b instanceof House h) {
-                capacity += h.getCapacity();
-            }
+            capacity += b.getHouseCapacity();
         }
 
         this.housingCapacity = capacity;
