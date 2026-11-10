@@ -1,0 +1,17 @@
+# Build output
+out/
+bin/
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse / VS Code
+.classpath
+.project
+.settings/
+.vscode/
+
+# macOS
+.DS_Store
