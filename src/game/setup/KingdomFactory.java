@@ -13,11 +13,11 @@ public class KingdomFactory {
         if (name.isBlank()) {
             name = "My Kingdom";
         }
-        return new Kingdom(name, false);
+        return new Kingdom(name);
     }
 
     public static Kingdom createKingdom(Difficulty difficulty) {
-        Kingdom enemy = new Kingdom("Dark Empire", true);
+        Kingdom enemy = new Kingdom("Dark Empire");
         difficulty.configureEnemyArmy(enemy);
         return enemy;
     }
