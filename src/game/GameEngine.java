@@ -171,6 +171,8 @@ public class GameEngine {
         } else {
             System.out.println("DEFEAT... Your kingdom falls under enemy rule...");
         }
+        int powerDifference = outcome.getDetails();
+        System.out.println("Power difference: " + Math.abs(powerDifference));
         System.out.println("\n===== GAME OVER =====\n");
     }
 }
