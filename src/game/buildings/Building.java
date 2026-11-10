@@ -29,6 +29,12 @@ public abstract class Building implements Purchasable {
     public boolean shouldAppearInStatus(){
         return true;
     }
+
+    // Can only one of this building exist?
+    public boolean isUnique(){
+        return false;
+    }
+
     //--------------------------
     // Daily effect
     //--------------------------

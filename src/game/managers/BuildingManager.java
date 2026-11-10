@@ -36,38 +36,21 @@ public class BuildingManager {
         }
 
         int choice = InputManager.getInt(scanner, "\nSelect building: ");
+        if (choice == menuItems.length){return;}
 
-        Building newBuilding = null;
+        Building newBuilding = switch (choice){
+            case 1 -> new Farm();
+            case 2 -> new SmallHouse();
+            case 3 -> new LargeHouse();
+            case 4 -> new Barrack();
+            case 5 -> new Stable();
+            case 6 -> new Bar();
+            case 7 -> new Wall();
+            default -> throw new InvalidBuildingException("Invalid choice\n");
+        };
 
-        switch (choice) {
-            case 1 -> newBuilding = new Farm();
-            case 2 -> newBuilding = new SmallHouse();
-            case 3 -> newBuilding = new LargeHouse();
-            case 4 -> {
-                if (kingdom.hasBuilding(Barrack.class)) {
-                    throw new InvalidBuildingException("You already have a " + new Barrack().getName() + "!\n");
-                }
-                newBuilding = new Barrack();
-            }
-            case 5 -> {
-                if (kingdom.hasBuilding(Stable.class)) {
-                    throw new InvalidBuildingException("You already have a " + new Stable().getName() + "!\n");
-                }
-                newBuilding = new Stable();
-            }
-            case 6 -> newBuilding = new Bar();
-            case 7 -> {
-                if (kingdom.hasBuilding(Wall.class)) {
-                    throw new InvalidBuildingException("You already have a " + new Wall().getName() + "!\n");
-                }
-                newBuilding = new Wall();
-            }
-            case 8 -> {
-                return;
-            }
-            default -> {
-                throw new InvalidBuildingException("Invalid option!\n");
-            }
+        if (newBuilding.isUnique() && kingdom.hasBuilding(newBuilding.getClass())){
+            throw new InvalidBuildingException("You already have a " + newBuilding.getName() + "!\n");
         }
 
         // Shared affordability check, defined once on Purchasable
@@ -82,11 +65,12 @@ public class BuildingManager {
 
         System.out.println("\n" + newBuilding.getName() + " successfully built!");
 
-        if (newBuilding instanceof House && kingdom.getHappiness() < 50){
-            System.out.println("""
-                    \nWARNING!
-                    Your happiness is below 50, new house will not give population growth for now.
-                    """);
+        if (newBuilding instanceof House && kingdom.getHappiness() < Kingdom.LOW_HAPPINESS){
+            System.out.printf("""
+                    
+                    WARNING!
+                    Your happiness is below %d, new house will not give population growth for now.
+                    %n""", Kingdom.LOW_HAPPINESS);
         }
     }
 }

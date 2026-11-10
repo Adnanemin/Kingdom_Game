@@ -20,7 +20,7 @@ public class Kingdom {
     private static final double CIVILIAN_FOOD_PER_PERSON = 0.3;
     private static final int STARVATION_PENALTY = 5;
 
-    private static final int LOW_HAPPINESS = 50;
+    public static final int LOW_HAPPINESS = 50;
     private static final int VERY_LOW_HAPPINESS = 25;
 
     private static final double MIGRATION_LOW = 0.02;
@@ -150,7 +150,7 @@ public class Kingdom {
             return null;
         }
 
-        if (happiness >= 50) {
+        if (happiness >= LOW_HAPPINESS) {
             int chance = Math.min(happiness - 40, 50);
             if (random.nextInt(100) < chance) {
                 changePopulation(1);

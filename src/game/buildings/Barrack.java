@@ -10,6 +10,12 @@ public class Barrack extends Building {
         super("Barracks", 40);
         // cost = 40 gold
     }
+
+    @Override
+    public boolean isUnique() {
+        return true;
+    }
+
     //--------------------------
     // Daily Effect
     //--------------------------

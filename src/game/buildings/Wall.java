@@ -12,6 +12,12 @@ public class Wall extends Building{
         // cost = 70 golds
         // Expensive but powerful
     }
+
+    @Override
+    public boolean isUnique() {
+        return true;
+    }
+
     //--------------------------
     // Daily Effect
     //--------------------------

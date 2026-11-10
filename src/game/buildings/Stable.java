@@ -10,6 +10,12 @@ public class Stable extends Building {
         super("Stable", 60);
         // cost = 60 golds
     }
+
+    @Override
+    public boolean isUnique(){
+        return true;
+    }
+
     //--------------------------
     // Daily Effect
     //--------------------------
