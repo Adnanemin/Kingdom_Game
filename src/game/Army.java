@@ -41,17 +41,10 @@ public class Army {
         units.add(unit);
     }
 
-    // Overload: Add multiple units
+    // Overload: Add 'count' NEW units, each created by the factory
     public void addUnit(Supplier<Unit> factory, int count){
         for (int i = 0; i < count; i ++){
             addUnit(factory.get());
-        }
-    }
-
-    // Overload: Add units from a list
-    public void addUnit(List<Unit> unitList){
-        for(Unit u : unitList){
-            addUnit(u);
         }
     }
 

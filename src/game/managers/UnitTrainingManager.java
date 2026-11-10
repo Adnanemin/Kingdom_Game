@@ -49,7 +49,7 @@ public class UnitTrainingManager {
         Building required = unit.getRequiredBuilding();
         if(!kingdom.hasBuilding(required.getClass())){
             throw new PrerequisiteNotMetException(
-                    "You need a " + required.getName() + " to train " + unit.getName() + " !"
+                    "You need a " + required.getName() + " to train " + unit.getName() + "!"
             );
         }
 

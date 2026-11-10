@@ -23,7 +23,6 @@ public class ReinforcementArrival implements RandomEvent {
         System.out.println("\n[EVENT] " + getName());
         System.out.println(getDescription());
 
-        // List of reinforcements
         kingdom.getArmy().addUnit(Soldier::new, SOLDIER_COUNT);
         kingdom.getArmy().addUnit(Archer::new, ARCHER_COUNT);
         kingdom.getArmy().addUnit(Cavalry::new, CAVALRY_COUNT);
