@@ -7,6 +7,8 @@ public class Wall extends Building{
     //--------------------------
     // Constructor
     //--------------------------
+    private static final int DEFENCE_BONUS = 20;
+
     public Wall(){
         super("Wall", 70);
         // cost = 70 golds
@@ -32,9 +34,9 @@ public class Wall extends Building{
     //--------------------------
     // Getter for defensive bonus
     //--------------------------
+    @Override
     public int getDefenceBonus(){
         // Permanent defense bonus for the kingdom
-        int defenseBonus = 20;
-        return defenseBonus;
+        return DEFENCE_BONUS;
     }
 }

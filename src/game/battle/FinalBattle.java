@@ -1,7 +1,6 @@
 package game.battle;
 
 import game.Kingdom;
-import game.buildings.Wall;
 import game.buildings.Building;
 import game.util.Outcome;
 
@@ -26,11 +25,10 @@ public class FinalBattle {
 
         // Wall bonus
         for (Building b : player.getBuildings()){
-            if (b instanceof Wall w){
-                System.out.println(
-                        "Your Wall reinforces your defenses! (+" + w.getDefenceBonus() + ")"
-                );
-                playerPower += w.getDefenceBonus();
+            int bonus = b.getDefenceBonus();
+            if(bonus > 0){
+                System.out.println("Your " + b.getName() + " reinforces your defences! (+ " + bonus + ")");
+                playerPower += bonus;
             }
         }
 

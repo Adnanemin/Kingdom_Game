@@ -40,6 +40,10 @@ public abstract class Building implements Purchasable {
         return 0;
     }
 
+    //Bonus this building adds to the final battle (0 for non-defensive buildings)
+    public int getDefenceBonus(){
+        return 0;
+    }
     //--------------------------
     // Daily effect
     //--------------------------
