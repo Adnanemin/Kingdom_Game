@@ -49,7 +49,7 @@ public class GameEngine {
         enemyKingdom = KingdomFactory.createKingdom(difficulty);
         playerKingdom = KingdomFactory.createKingdom(scanner);
 
-        session = new GameSession(difficulty);
+        session = new GameSession();
 
         buildingManager = new BuildingManager(scanner, playerKingdom);
         unitTrainingManager = new UnitTrainingManager(scanner, playerKingdom);
