@@ -14,8 +14,8 @@ public class DifficultyManager {
             System.out.println((i + 1) + ". " + menuItems[i]);
         }
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = InputManager.getInt(scanner, "\nYour choice: ");
+
         if (choice < 1 || choice > 3) {
             System.out.println("Invalid input! Starting with Normal difficulty.");
             return Difficulty.NORMAL;
