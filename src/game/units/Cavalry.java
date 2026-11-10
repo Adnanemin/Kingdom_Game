@@ -1,5 +1,8 @@
 package game.units;
 
+import game.buildings.Building;
+import game.buildings.Stable;
+
 public class Cavalry extends Unit{
     //----------------------
     // Constructor
@@ -18,5 +21,10 @@ public class Cavalry extends Unit{
     @Override
     public int getBattleValue(){
         return (getAttack() * 3) + getDefense(); // Elite level units
+    }
+
+    @Override
+    public Building getRequiredBuilding() {
+        return new Stable();
     }
 }

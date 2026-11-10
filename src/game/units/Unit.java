@@ -1,6 +1,7 @@
 package game.units;
 
 import game.util.Purchasable;
+import game.buildings.Building;
 
 public abstract class Unit implements Purchasable {
     private final String name;
@@ -35,4 +36,7 @@ public abstract class Unit implements Purchasable {
     // Battle calculation(abstract)
     //------------------------------
     public abstract int getBattleValue();
+
+    // What building must exist before this unit can be trained
+    public abstract Building getRequiredBuilding();
 }

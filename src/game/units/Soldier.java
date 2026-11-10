@@ -1,5 +1,8 @@
 package game.units;
 
+import game.buildings.Building;
+import game.buildings.Barrack;
+
 public class Soldier extends Unit {
     //----------------------
     // Constructor
@@ -19,5 +22,10 @@ public class Soldier extends Unit {
     public int getBattleValue(){
         // Soldiers rely more on defense
         return getAttack() + (int)(getDefense() * 2.5); // Just needed the integer value for optimization
+    }
+
+    @Override
+    public Building getRequiredBuilding() {
+        return new Barrack();
     }
 }
